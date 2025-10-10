@@ -1,0 +1,80 @@
+# 忽略 set1 文件夹# 忽略 set1 文件夹
+
+set1/set1/
+
+
+
+# 忽略编辑器配置文件# 忽略编辑器配置文件
+
+.idea/.idea/
+
+.vscode/.vscode/
+
+*.code-workspace*.code-workspace
+
+
+
+# 忽略虚拟环境和缓存# 忽略虚拟环境和缓存
+
+.venv/.venv/
+
+venv/venv/
+
+__pycache__/__pycache__/
+
+*.pyc*.pyc
+
+*.pyo*.pyo
+
+*.pyd*.pyd
+
+
+
+# 忽略数据压缩包# 忽略数据压缩包
+
+*.zip*.zip
+
+*.tar*.tar
+
+*.tar.gz*.tar.gz
+
+*.rar*.rar
+
+*.7z*.7z
+
+
+
+# 忽略 archive 目录下的数据文件# 忽略 archive 目录下的数据文件
+
+archive/archive/
+
+
+
+# 忽略 datasets 目录下的数据文件（如有）# 忽略 datasets 目录下的数据文件（如有）
+
+datasets/datasets/
+
+
+
+# 保留模型文件（如 .pt）# 保留模型文件（如 .pt）
+
+!*.pt!*.pt
+
+
+
+# 保留主项目代码和 notebook# 保留主项目代码和 notebook
+
+!primary.ipynb!primary.ipynb
+
+
+
+# 保留 YAML 配置文件# 保留 YAML 配置文件
+
+!*.yaml!*.yaml
+
+
+
+# 保留 markdown 文档# 保留 markdown 文档
+
+!*.md!*.md
+

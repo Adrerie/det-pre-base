@@ -1,0 +1,35 @@
+# Pest24 dataset configuration
+# Train/val/test sets as *.txt files with one image path per line.
+
+path: d:/.FileModel/archive/Pest24/VOCdevkit/voc2007 # dataset root dir
+train: yolo_path/train.txt  # train images (relative to 'path')
+val: yolo_path/val.txt  # val images (relative to 'path')
+test: yolo_path/test.txt # test images (optional)
+
+# Classes
+nc: 24  # number of classes
+names:
+  - 'Rice planthopper'
+  - 'Rice Leaf Roller'
+  - 'Chilo suppressalis'
+  - 'Armyworm'
+  - 'Bollworm'
+  - 'Meadow borer'
+  - 'Athetis lepigone'
+  - 'Spodoptera litura'
+  - 'Spodoptera exigua'
+  - 'Stem borer'
+  - 'Little Gecko'
+  - 'Plutella xylostella'
+  - 'Spodoptera cabbage'
+  - 'Scotogramma trifolii Rottemberg'
+  - 'Yellow tiger'
+  - 'Land tiger'
+  - 'Eight-character tiger'
+  - 'Holotrichia oblita'
+  - 'Holotrichia parallela'
+  - 'Anomala corpulenta'
+  - 'Gryllotalpa orientalis'
+  - 'Nematode trench'
+  - 'Agriotes fuscicollis Miwa'
+  - 'Melahotus'
