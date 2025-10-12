@@ -1,80 +1,80 @@
-# 忽略 set1 文件夹# 忽略 set1 文件夹
+# 忽略 set1 文件夹# 
 
-set1/set1/
-
-
-
-# 忽略编辑器配置文件# 忽略编辑器配置文件
-
-.idea/.idea/
-
-.vscode/.vscode/
-
-*.code-workspace*.code-workspace
+set1/
 
 
 
-# 忽略虚拟环境和缓存# 忽略虚拟环境和缓存
+# 忽略编辑器配置文件
 
-.venv/.venv/
+.idea/
 
-venv/venv/
+.vscode/
 
-__pycache__/__pycache__/
-
-*.pyc*.pyc
-
-*.pyo*.pyo
-
-*.pyd*.pyd
+*.code-workspace*
 
 
 
-# 忽略数据压缩包# 忽略数据压缩包
+# 忽略虚拟环境和缓存
 
-*.zip*.zip
+.venv/
 
-*.tar*.tar
+venv/
 
-*.tar.gz*.tar.gz
+__pycache__/
 
-*.rar*.rar
+*.pyc*
 
-*.7z*.7z
+*.pyo*
 
-
-
-# 忽略 archive 目录下的数据文件# 忽略 archive 目录下的数据文件
-
-archive/archive/
+*.pyd*
 
 
 
-# 忽略 datasets 目录下的数据文件（如有）# 忽略 datasets 目录下的数据文件（如有）
+# 忽略数据压缩文件
 
-datasets/datasets/
+*.zip*
 
+*.tar*
 
+*.tar.gz*
 
-# 保留模型文件（如 .pt）# 保留模型文件（如 .pt）
+*.rar*
 
-!*.pt!*.pt
-
-
-
-# 保留主项目代码和 notebook# 保留主项目代码和 notebook
-
-!primary.ipynb!primary.ipynb
+*.7z*
 
 
 
-# 保留 YAML 配置文件# 保留 YAML 配置文件
+# 忽略 archive 目录下的数据文件
 
-!*.yaml!*.yaml
+archive/
 
 
 
-# 保留 markdown 文档# 保留 markdown 文档
+# 忽略 datasets 目录下的数据文件（如有）
 
-!*.md!*.md
+datasets/
 
+# 忽略word文档
+*.docx*
+
+# 保留模型文件（如 .pt）
+
+!*.pt
+
+
+
+# 保留主项目代码和 notebook
+
+!primary.ipynb
+
+
+
+# 保留 YAML 配置文件
+
+!*.yaml
+
+
+
+# 保留 markdown 文档
+
+!*.md
