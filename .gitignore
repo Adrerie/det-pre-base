@@ -12,6 +12,8 @@ set1/
 
 *.code-workspace*
 
+.ipynb_checkpoints/
+
 
 
 # 忽略虚拟环境和缓存
