@@ -1,13 +1,12 @@
 # Pest24 dataset configuration
-# Train/val/test sets as *.txt files with one image path per line.
 
-path: d:/.FileModel/archive/Pest24/VOCdevkit/voc2007 # dataset root dir
-train: yolo_path/train.txt  # train images (relative to 'path')
-val: yolo_path/val.txt  # val images (relative to 'path')
-test: yolo_path/test.txt # test images (optional)
+path: archive/Pest24/VOCdevkit/voc2007 
+train: yolo_path/train.txt  
+val: yolo_path/val.txt  
+test: yolo_path/test.txt 
 
 # Classes
-nc: 24  # number of classes
+nc: 24  
 names:
   - 'Rice planthopper'
   - 'Rice Leaf Roller'

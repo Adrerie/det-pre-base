@@ -54,9 +54,10 @@ archive/
 
 datasets/
 
-# 忽略word文档
+# 忽略文档
 *.docx*
-
+*.pdf*
+设计表.md
 # 保留模型文件（如 .pt）
 
 !*.pt
