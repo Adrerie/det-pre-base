@@ -1,83 +1,49 @@
 # 忽略 set1 文件夹# 
-
 set1/
 
-
-
 # 忽略编辑器配置文件
-
 .idea/
-
 .vscode/
-
 *.code-workspace*
-
 .ipynb_checkpoints/
 
-
-
 # 忽略虚拟环境和缓存
-
 .venv/
-
 venv/
-
 __pycache__/
-
 *.pyc*
-
 *.pyo*
-
 *.pyd*
 
-
-
 # 忽略数据压缩文件
-
 *.zip*
-
 *.tar*
-
 *.tar.gz*
-
 *.rar*
-
 *.7z*
 
-
-
 # 忽略 archive 目录下的数据文件
-
 archive/
 
-
-
 # 忽略 datasets 目录下的数据文件（如有）
-
 datasets/
+
+# 忽略训练过程和结果
+runs/
+ultralytics/runs/
 
 # 忽略文档
 *.docx*
 *.pdf*
 设计表.md
 # 保留模型文件（如 .pt）
-
 !*.pt
 
-
-
 # 保留主项目代码和 notebook
-
 !primary.ipynb
 
-
-
 # 保留 YAML 配置文件
-
 !*.yaml
 
-
-
 # 保留 markdown 文档
-
 !*.md
