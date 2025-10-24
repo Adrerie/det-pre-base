@@ -36,6 +36,7 @@ ultralytics/runs/
 *.docx*
 *.pdf*
 设计表.md
+说明文档-模版.md
 # 保留模型文件（如 .pt）
 !*.pt
 
@@ -47,3 +48,6 @@ ultralytics/runs/
 
 # 保留 markdown 文档
 !*.md
+
+# backup files
+*.bak

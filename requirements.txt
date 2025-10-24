@@ -1,0 +1,29 @@
+# 环境配置指南
+#
+# 步骤 1: 安装 PyTorch (重要！请手动操作)
+# -------------------------------------------------
+# 请访问 PyTorch 官方网站 (https://pytorch.org/get-started/locally/)
+# 根据操作系统和 CUDA 版本，选择并运行对应的安装命令。
+# 这样做可以确保安装的是与 NVIDIA 驱动兼容的、支持 GPU 加速的版本。
+#
+# 例如，如果 CUDA 版本是 12.6，命令可能如下：
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#
+#
+# 步骤 2: 安装其余依赖
+# -------------------------------------------------
+# 在成功安装 PyTorch 后，运行以下命令来安装本项目的其他库：
+# pip install -r requirements.txt
+#
+
+# 核心依赖 (PyTorch 和 Torchvision 应已在步骤1中手动安装)
+ultralytics>=8.0
+
+# 数据分析与可视化 (在Jupyter Notebook中使用)
+pandas
+matplotlib
+seaborn
+
+# 系统监控与日志 (在Jupyter Notebook中使用)
+psutil
+tensorboard
