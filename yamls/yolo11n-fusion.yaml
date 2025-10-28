@@ -1,0 +1,10 @@
+# Inherit everything from the base yolo11n, but change the head
+_target_: yolo11n.yaml
+
+# LCFA-Fusion Head (Neck)
+head:
+  # Inputs from backbone: P3 (idx 4), P4 (idx 6), P5 (idx 10)
+  - [[4, 6, 10], 1, modules.custom_modules.LCFANeck, [256, 512, 1024]] # 11
+  
+  # The LCFANeck module outputs a list of 3 feature maps [P3, P4, P5]
+  - [[-1], 1, Detect, [nc]] # Detect
