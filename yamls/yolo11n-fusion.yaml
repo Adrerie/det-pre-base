@@ -1,10 +1,27 @@
-# Inherit everything from the base yolo11n, but change the head
-_target_: yolo11n.yaml
+# YOLO11n-Fusion - Scaled for 'n' model variant (width_mult=0.25)
+# Parameters
+nc: 80 # number of classes
+
+# YOLO11n backbone
+backbone:
+  # [from, repeats, module, args] - repeats are halved (depth_mult=0.5), channels are quartered (width_mult=0.25)
+  - [-1, 1, Conv, [16, 3, 2]]   # 0-P1/2 (64 * 0.25 = 16)
+  - [-1, 1, Conv, [32, 3, 2]]   # 1-P2/4 (128 * 0.25 = 32)
+  - [-1, 1, C3k2, [64, False, 0.25]] # 2 (repeats: 2*0.5=1, ch: 256*0.25=64)
+  - [-1, 1, Conv, [64, 3, 2]]   # 3-P3/8 (256*0.25=64)
+  - [-1, 1, C3k2, [128, False, 0.25]] # 4 (repeats: 2*0.5=1, ch: 512*0.25=128)
+  - [-1, 1, Conv, [128, 3, 2]]  # 5-P4/16 (512*0.25=128)
+  - [-1, 1, C3k2, [128, True]]  # 6 (repeats: 2*0.5=1, ch: 512*0.25=128)
+  - [-1, 1, Conv, [256, 3, 2]]  # 7-P5/32 (1024*0.25=256)
+  - [-1, 1, C3k2, [256, True]]  # 8 (repeats: 2*0.5=1, ch: 1024*0.25=256)
+  - [-1, 1, SPPF, [256, 5]]     # 9 (1024*0.25=256)
 
 # LCFA-Fusion Head (Neck)
 head:
-  # Inputs from backbone: P3 (idx 4), P4 (idx 6), P5 (idx 10)
-  - [[4, 6, 10], 1, modules.custom_modules.LCFANeck, [256, 512, 1024]] # 11
+  # Inputs from backbone: P3 (idx 3), P4 (idx 6), P5 (idx 9)
+  # Channels must match the backbone's scaled output: 64, 128, 256
+  - [[3, 6, 9], 1, LCFANeck, [64, 128, 256]] # 10
   
   # The LCFANeck module outputs a list of 3 feature maps [P3, P4, P5]
-  - [[-1], 1, Detect, [nc]] # Detect
+  # The Detect head will be built using the channel list from LCFANeck's output
+  - [-1, 1, Detect, [nc]] # 11

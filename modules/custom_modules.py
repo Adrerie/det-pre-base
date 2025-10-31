@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from ultralytics.nn.modules import Conv, C3, SPPF # 导入YOLO的基础模块
+import math
 
 # =======================================================
 #               模块一: ECA (通道注意力)
@@ -104,46 +105,48 @@ class CSAB_Offset(nn.Module):
 # =======================================================
 class LCFANeck(nn.Module):
     """
-    LCFANet-inspired Neck to replace the entire YOLOv11 FPN/PAN.
-    This module takes 3 feature maps from the backbone (P3, P4, P5) 
+    A robust and dynamic FPN+PAN neck structure.
+    It takes 3 feature maps from the backbone (P3, P4, P5)
     and outputs 3 feature maps for the Detect head.
+    The output channels will be the same as the input channels.
     """
     def __init__(self, c1, c2, c3): # Input channels from backbone P3, P4, P5
         super().__init__()
-        # Determine internal and output channel counts based on YOLOv11n scale
-        c_iv = [c1, c2, c3]
-        c_out = [128, 256, 512] # Corresponds to YOLOv11n's Detect head inputs
-
-        # --- MSASF Part (Multi-Scale Adaptive Spatial Fusion) ---
-        self.msasf_projs = nn.ModuleList([nn.Conv2d(c, c_out[0], 1, bias=False) for c in c_iv])
-        self.msasf_fusion = C3(c_out[0] * 3, c_out[0], n=2, shortcut=False)
-
-        # --- CLHFP Part (Cross-Level Hierarchical Feature Pyramid) ---
-        self.clhfp_up_p4 = nn.Upsample(scale_factor=2, mode='nearest')
-        self.clhfp_fusion_p3 = C3(c_out[0] + c_out[1], c_out[0], n=2, shortcut=False)
         
-        # --- Down-sampling path to regenerate P4 and P5 for detection ---
-        self.downsample_p4 = Conv(c_out[0], c_out[1], 3, 2)
-        self.p4_fusion = C3(c_out[1] + c2, c_out[1], n=2, shortcut=False) # Fuse with original P4
-        
-        self.downsample_p5 = Conv(c_out[1], c_out[2], 3, 2)
-        self.p5_fusion = C3(c_out[2] + c3, c_out[2], n=2, shortcut=False) # Fuse with original P5
+        # --- Top-down path (FPN) ---
+        self.p5_upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.p4_fusion = C3(c2 + c3, c2, n=1, shortcut=False)
+
+        self.p4_upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.p3_fusion = C3(c1 + c2, c1, n=1, shortcut=False)
+
+        # --- Bottom-up path (PAN) ---
+        self.p3_downsample = Conv(c1, c1, 3, 2)
+        # BUG FIX: The input channels for this fusion are c1 (from downsampled p3) + c2 (from fused p4).
+        self.p4_pan_fusion = C3(c1 + c2, c2, n=1, shortcut=False)
+
+        self.p4_downsample = Conv(c2, c2, 3, 2)
+        self.p5_pan_fusion = C3(c2 + c3, c3, n=1, shortcut=False)
+
+        # Define the output channels for the parser
+        self.c_out = [c1, c2, c3]
 
     def forward(self, x):
         p3_in, p4_in, p5_in = x
 
-        # 1. MSASF: Fuse all levels at the highest resolution (P3 level)
-        p3_proj = self.msasf_projs[0](p3_in)
-        p4_upsampled = F.interpolate(self.msasf_projs[1](p4_in), size=p3_proj.shape[-2:], mode='bilinear', align_corners=False)
-        p5_upsampled = F.interpolate(self.msasf_projs[2](p5_in), size=p3_proj.shape[-2:], mode='bilinear', align_corners=False)
-        msasf_out = self.msasf_fusion(torch.cat([p3_proj, p4_upsampled, p5_upsampled], 1))
+        # FPN path (top-down)
+        p5_upsampled = self.p5_upsample(p5_in)
+        p4_fused = self.p4_fusion(torch.cat([p4_in, p5_upsampled], 1))
 
-        # 2. Top-down path with CLHFP-like fusion
-        p3_out = self.clhfp_fusion_p3(torch.cat([msasf_out, self.clhfp_up_p4(p4_in)], 1))
+        p4_upsampled = self.p4_upsample(p4_fused)
+        p3_out = self.p3_fusion(torch.cat([p3_in, p4_upsampled], 1))
 
-        # 3. Bottom-up path to generate features for Detect head
-        p4_out = self.p4_fusion(torch.cat([self.downsample_p4(p3_out), p4_in], 1))
-        p5_out = self.p5_fusion(torch.cat([self.downsample_p5(p4_out), p5_in], 1))
+        # PAN path (bottom-up)
+        p3_downsampled = self.p3_downsample(p3_out)
+        p4_out = self.p4_pan_fusion(torch.cat([p3_downsampled, p4_fused], 1))
+
+        p4_downsampled = self.p4_downsample(p4_out)
+        p5_out = self.p5_pan_fusion(torch.cat([p4_downsampled, p5_in], 1))
 
         return [p3_out, p4_out, p5_out]
 
